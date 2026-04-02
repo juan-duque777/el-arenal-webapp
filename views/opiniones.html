@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Opiniones - El Arenal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
+    <style>
+        .fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Ola del Footer */
+        @keyframes waveMove { 0% { transform: translateX(0); } 50% { transform: translateX(-10px); } 100% { transform: translateX(0); } }
+        .wave-animated path { animation: waveMove 6s ease-in-out infinite; }
+        .show-footer { opacity: 1 !important; transform: translateY(0) !important; }
+
+        /* Estrellas Interactivas Premium */
+        .star-rating { display: flex; flex-direction: row-reverse; justify-content: center; gap: 0.25rem; }
+        .star-rating input { display: none; }
+        .star-rating label { font-size: 2.5rem; color: #E5E7EB; cursor: pointer; transition: all 0.2s ease-in-out; }
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label { color: #C28B16; transform: scale(1.1); }
+    </style>
+</head>
+<body class="bg-[#F4F2EF] text-gray-800 font-sans flex flex-col min-h-screen">
+
+    <nav class="bg-[#E3E0DB] px-4 py-3 shadow-sm sticky top-0 z-50">
+        <div class="flex flex-wrap items-center justify-between mx-auto">
+            <a href="/" class="flex items-center space-x-3">
+                <img src="./img/logo.png" alt="Logo El Arenal" class="w-11 h-11 rounded-full drop-shadow" onerror="this.src='https://via.placeholder.com/44'" />
+                <span class="text-xl font-bold text-[#D94D1A] transition-colors hover:text-[#C28B16] tracking-tight">El Arenal</span>
+            </a>
+            
+            <div class="flex items-center gap-2 md:order-2">
+                <button data-collapse-toggle="navbar-menu" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-[#61161D] rounded-lg md:hidden hover:bg-[#d1c5b2] focus:outline-none focus:ring-2 focus:ring-[#D94D1A]">
+                    <span class="sr-only">Abrir menú</span>
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 17 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/></svg>
+                </button>
+            </div>
+
+            <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 mt-3 md:mt-0" id="navbar-menu">
+                <ul class="flex flex-col p-3 md:p-0 mt-2 border border-gray-200/80 rounded-2xl bg-white/95 backdrop-blur-md md:bg-transparent md:flex-row md:space-x-2 md:mt-0 md:border-0 shadow-xl shadow-black/5 md:shadow-none gap-2">
+                    <li><a href="/" class="flex items-center gap-3 py-3 px-4 text-gray-700 font-medium rounded-xl hover:bg-[#D94D1A]/10 hover:text-[#D94D1A] transition-all">Inicio</a></li>
+                    <li><a href="/menu" class="flex items-center gap-3 py-3 px-4 text-gray-700 font-medium rounded-xl hover:bg-[#D94D1A]/10 hover:text-[#D94D1A] transition-all">Menú</a></li>
+                    <li><a href="/reservas" class="flex items-center gap-3 py-3 px-4 text-gray-700 font-medium rounded-xl hover:bg-[#D94D1A]/10 hover:text-[#D94D1A] transition-all">Reservas</a></li>
+                    <li><a href="/opiniones" class="flex items-center gap-3 py-3 px-4 text-[#D94D1A] bg-[#D94D1A]/10 font-bold rounded-xl transition-all">Opiniones</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow px-5 py-8 max-w-6xl mx-auto w-full flex flex-col md:flex-row gap-10 items-start relative">
+        
+        <div class="w-full md:w-5/12 fade-in-up" style="animation-delay: 0.1s;">
+            
+            <a href="/" class="inline-flex items-center gap-2 text-gray-500 hover:text-[#D94D1A] font-medium mb-4 transition-colors group w-fit active:scale-95">
+                <div class="bg-white p-2 rounded-full shadow-sm border border-gray-200 group-hover:border-[#D94D1A] transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+                </div>
+                Volver al inicio
+            </a>
+
+            <h1 class="text-4xl font-extrabold text-[#61161D] mb-2 tracking-tight">Experiencia <span class="text-[#D94D1A]">Arenal</span></h1>
+            <p class="text-gray-600 text-[15px] mb-6">Tu opinión nos ayuda a seguir sirviendo el mejor pescado del Llano.</p>
+
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-6 mb-8">
+                <div id="promedioTexto" class="text-5xl font-extrabold text-[#61161D]">0.0</div>
+                <div>
+                    <div id="promedioEstrellas" class="flex text-[#C28B16] text-xl mb-1">☆☆☆☆☆</div>
+                    <p id="totalOpinionesTexto" class="text-sm text-gray-500 font-medium">Cargando estadísticas...</p>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-lg border border-gray-100 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#C28B16] to-[#D94D1A]"></div>
+                
+                <h3 class="font-bold text-xl mb-1 text-gray-800">¡Déjanos tu reseña! ✍️</h3>
+                <p class="text-sm text-gray-500 mb-6">Nos encantaría saber cómo te fue.</p>
+                
+                <form id="opinionForm" class="space-y-5">
+                    
+                    <div class="text-center bg-gray-50 py-3 rounded-2xl border border-gray-100">
+                        <p class="text-sm font-semibold text-gray-700 mb-1">¿Cuántas estrellas nos das?</p>
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="rating" value="5" required/><label for="star5">★</label>
+                            <input type="radio" id="star4" name="rating" value="4" /><label for="star4">★</label>
+                            <input type="radio" id="star3" name="rating" value="3" /><label for="star3">★</label>
+                            <input type="radio" id="star2" name="rating" value="2" /><label for="star2">★</label>
+                            <input type="radio" id="star1" name="rating" value="1" /><label for="star1">★</label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 text-sm font-bold text-gray-700">Tu Nombre</label>
+                        <input type="text" id="nombre" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#D94D1A] focus:border-[#D94D1A] block w-full p-3.5 transition-all outline-none" placeholder="Ej: Juan Pérez" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block mb-2 text-sm font-bold text-gray-700">Comentario</label>
+                        <textarea id="comentario" rows="4" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#D94D1A] focus:border-[#D94D1A] block w-full p-3.5 transition-all outline-none resize-none" placeholder="¿Qué tal te pareció la comida y el ambiente?" required></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full text-white bg-gradient-to-r from-[#D94D1A] to-[#b53c15] hover:shadow-lg hover:shadow-orange-500/40 font-bold rounded-xl text-[16px] px-5 py-4 mt-2 transition-all transform active:scale-95">
+                        Publicar Opinión
+                    </button>
+                </form>
+
+                <div id="successMessage" class="hidden text-center py-8 fade-in-up">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+                        <svg class="w-10 h-10 text-[#268C79]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">¡Gracias por tu reseña!</h2>
+                    <p class="text-gray-600 text-sm mb-6">Tu opinión es muy importante para nosotros. Ha sido enviada y está en un breve proceso de revisión antes de ser publicada. 💛</p>
+                    <button onclick="location.reload()" class="text-[#D94D1A] font-bold hover:underline">Escribir otra reseña</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full md:w-7/12 fade-in-up" style="animation-delay: 0.3s;">
+            <div class="flex items-center justify-between mb-6 border-b border-gray-200 pb-2">
+                <h3 class="font-bold text-xl text-gray-800">Comentarios Recientes</h3>
+                <span class="text-sm font-medium text-gray-500 bg-white px-3 py-1 rounded-full shadow-sm border border-gray-100">Más recientes 👇</span>
+            </div>
+
+            <div id="contenedorOpiniones" class="space-y-5 h-[600px] overflow-y-auto pr-2 no-scrollbar">
+                
+                <div class="text-center py-10 text-gray-500 font-bold text-lg">
+                    Cargando experiencias... 🌟
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+<footer id="footer" class="opacity-0 translate-y-8 transition-all duration-700 relative z-10 mt-8 w-full">
+      
+      <div class="w-full leading-none overflow-hidden bg-[#D9C8A3]">
+        <svg class="block w-full h-16 sm:h-20 wave-animated" preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,0V46.29c47.79,22.2,103.59,29.05,158.39,17.39C230.69,51.24,284.83,9.56,339.57,2.9c54.74-6.67,104.86,16.77,157.43,26.22,86.91,16.15,172.28-12.56,258.86-18.5C853.43,4.61,933.14,30.12,1013,57.79c64.43,22.27,127.78,46.84,187,62.21V0Z" fill="#F4F2EF"></path>
+        </svg>
+      </div>
+
+      <div class="bg-gradient-to-b from-[#D9C8A3] via-[#E3E0DB] to-[#F4F2EF] pt-4 pb-8 px-5 sm:px-8 text-center">
+        
+        <div class="mb-8 mt-2">
+          <h3 class="text-lg font-semibold text-[#D94D1A] mb-1 flex items-center justify-center gap-1">📞 Contáctanos</h3>
+          <p class="text-sm text-gray-700">Tel: <a href="tel:+573001112233" class="text-[#D94D1A] font-medium hover:underline">+57 300 111 2233</a></p>
+          <p class="text-sm text-gray-700">Email: <a href="mailto:contacto@elarenal.com" class="text-[#D94D1A] hover:underline">contacto@elarenal.com</a></p>
+          <p class="text-sm text-gray-700 font-medium mt-1">📍 Kilómetro 10 vía Acacías</p>
+        </div>
+
+        <div class="mb-10 max-w-lg mx-auto">
+          <h3 class="text-lg font-semibold text-[#268C79] mb-4 flex items-center justify-center gap-2">🌐 Síguenos y Comparte</h3>
+          <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-6 px-4">
+            <a href="#" class="flex items-center justify-center gap-3 py-3 px-6 rounded-2xl bg-black/5 hover:bg-black/10 transition-colors active:scale-95">
+              <img src="./img/icono facebook.webp" alt="Facebook" class="w-8 h-8 footer-icon">
+              <span class="font-medium text-gray-800 text-[1.1rem]">Facebook</span>
+            </a>
+            <a href="#" class="flex items-center justify-center gap-3 py-3 px-6 rounded-2xl bg-black/5 hover:bg-black/10 transition-colors active:scale-95">
+              <img src="./img/icono instagram1.png" alt="Instagram" class="w-8 h-8 footer-icon">
+              <span class="font-medium text-gray-800 text-[1.1rem]">Instagram</span>
+            </a>
+            <a href="#" class="flex items-center justify-center gap-3 py-3 px-6 rounded-2xl bg-black/5 hover:bg-black/10 transition-colors active:scale-95">
+              <img src="./img/icono whatsapp.png" alt="WhatsApp" class="w-8 h-8 footer-icon">
+              <span class="font-medium text-gray-800 text-[1.1rem]">WhatsApp</span>
+            </a>
+          </div>
+        </div>
+        <div class="border-t border-[#D1C5B2] pt-6">
+          <h2 class="text-[#D94D1A] font-bold text-lg">Restaurante El Arenal</h2>
+          <p class="italic text-gray-700 text-sm mb-1">Tradición, sabor y frescura desde el llano</p>
+          <p class="text-xs text-gray-600">© 2026 Restaurante El Arenal. Todos los derechos reservados.</p>
+        </div>
+
+      </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+    <script>
+        // Animación del footer
+        document.addEventListener("DOMContentLoaded", () => {
+            const footer = document.getElementById("footer");
+            if(footer) {
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => { if (entry.isIntersecting) footer.classList.add("show-footer"); });
+                });
+                observer.observe(footer);
+            }
+        });
+    </script>
+    <script src="/js/opiniones-publico.js"></script>
+</body>
+</html>
+</body>
+</html>

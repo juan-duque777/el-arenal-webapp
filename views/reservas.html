@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva tu Mesa - El Arenal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
+    
+    <style>
+        .fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        /* Ola del Footer */
+        @keyframes waveMove { 0% { transform: translateX(0); } 50% { transform: translateX(-10px); } 100% { transform: translateX(0); } }
+        .wave-animated path { animation: waveMove 6s ease-in-out infinite; }
+        .show-footer { opacity: 1 !important; transform: translateY(0) !important; }
+    </style>
+</head>
+<body class="bg-[#F4F2EF] text-gray-800 font-sans flex flex-col min-h-screen">
+
+    <nav class="bg-[#E3E0DB] px-4 py-3 shadow-sm sticky top-0 z-50">
+        <div class="flex flex-wrap items-center justify-between mx-auto">
+            <a href="/" class="flex items-center space-x-3">
+                <img src="./img/logo.png" alt="Logo El Arenal" class="w-11 h-11 rounded-full drop-shadow" onerror="this.src='https://via.placeholder.com/44'" />
+                <span class="text-xl font-bold text-[#D94D1A] transition-colors hover:text-[#C28B16] tracking-tight">El Arenal</span>
+            </a>
+            
+            <div class="flex items-center gap-2 md:order-2">
+                <button data-collapse-toggle="navbar-menu" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-[#61161D] rounded-lg md:hidden hover:bg-[#d1c5b2] focus:outline-none focus:ring-2 focus:ring-[#D94D1A]">
+                    <span class="sr-only">Abrir menú</span>
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 17 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/></svg>
+                </button>
+            </div>
+
+            <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 mt-3 md:mt-0" id="navbar-menu">
+                <ul class="flex flex-col p-3 md:p-0 mt-2 border border-gray-200/80 rounded-2xl bg-white/95 backdrop-blur-md md:bg-transparent md:flex-row md:space-x-2 md:mt-0 md:border-0 shadow-xl shadow-black/5 md:shadow-none gap-2">
+                    <li><a href="/" class="flex items-center gap-3 py-3 px-4 text-gray-700 font-medium rounded-xl hover:bg-[#D94D1A]/10 hover:text-[#D94D1A] transition-all">Inicio</a></li>
+                    <li><a href="/menu" class="flex items-center gap-3 py-3 px-4 text-gray-700 font-medium rounded-xl hover:bg-[#D94D1A]/10 hover:text-[#D94D1A] transition-all">Menú</a></li>
+                    <li><a href="/reservas" class="flex items-center gap-3 py-3 px-4 text-[#D94D1A] bg-[#D94D1A]/10 font-bold rounded-xl transition-all">Reservas</a></li>
+                    <li><a href="/opiniones" class="flex items-center gap-3 py-3 px-4 text-gray-700 font-medium rounded-xl hover:bg-[#D94D1A]/10 hover:text-[#D94D1A] transition-all">Opiniones</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow px-5 py-8 max-w-6xl mx-auto w-full flex flex-col md:flex-row gap-8 items-start relative">
+        
+        <div class="w-full md:w-5/12 fade-in-up" style="animation-delay: 0.1s;">
+            
+            <a href="/" class="inline-flex items-center gap-2 text-gray-500 hover:text-[#D94D1A] font-medium mb-4 transition-colors group w-fit active:scale-95">
+                <div class="bg-white p-2 rounded-full shadow-sm border border-gray-200 group-hover:border-[#D94D1A] transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+                </div>
+                Volver al inicio
+            </a>
+
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-[#61161D] mb-4 tracking-tight">
+                Asegura tu <br> <span class="text-[#D94D1A]">mesa hoy 🍽️</span>
+            </h1>
+            <p class="text-gray-600 text-lg leading-relaxed mb-8">
+                Completa tus datos y prepárate para disfrutar del mejor pescado fresco en un ambiente familiar y campestre.
+            </p>
+
+            <div class="hidden sm:block rounded-3xl overflow-hidden shadow-lg border border-gray-200 h-64 relative">
+                <img src="./img/foto_restaurante3.jpg" class="absolute inset-0 w-full h-full object-cover" alt="Ambiente El Arenal">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#61161D]/80 to-transparent flex items-end p-5">
+                    <div class="flex items-center gap-3 text-white">
+                        <div class="flex -space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-gray-300 border-2 border-[#61161D] flex items-center justify-center text-xs font-bold text-gray-700">A</div>
+                            <div class="w-8 h-8 rounded-full bg-orange-200 border-2 border-[#61161D] flex items-center justify-center text-xs font-bold text-orange-700">M</div>
+                            <div class="w-8 h-8 rounded-full bg-yellow-200 border-2 border-[#61161D] flex items-center justify-center text-xs font-bold text-yellow-700">+</div>
+                        </div>
+                        <p class="text-sm font-medium">Cientos de familias nos eligen</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full md:w-7/12 fade-in-up" style="animation-delay: 0.3s;">
+            <div class="bg-white p-6 sm:p-10 rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden">
+                
+                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#C28B16] via-[#D94D1A] to-[#61161D]"></div>
+
+                <form id="reservaForm" class="space-y-6 mt-2">
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block mb-2 text-sm font-bold text-gray-700">Nombre completo</label>
+                            <input type="text" id="nombre" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#D94D1A] focus:border-[#D94D1A] block w-full p-3.5 transition-all outline-none" placeholder="Ej. Juan Pérez" required>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-bold text-gray-700">Teléfono (WhatsApp)</label>
+                            <input type="tel" id="telefono" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#D94D1A] focus:border-[#D94D1A] block w-full p-3.5 transition-all outline-none" placeholder="300 000 0000" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block mb-2 text-sm font-bold text-gray-700">Fecha</label>
+                            <input type="date" id="fecha" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#D94D1A] focus:border-[#D94D1A] block w-full p-3.5 transition-all outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-bold text-gray-700">Hora</label>
+                            <input type="time" id="hora" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#D94D1A] focus:border-[#D94D1A] block w-full p-3.5 transition-all outline-none" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 text-sm font-bold text-gray-700">Número de Personas</label>
+                        <select id="personas" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#D94D1A] focus:border-[#D94D1A] block w-full p-3.5 transition-all outline-none" required>
+                            <option value="" disabled selected>Selecciona la cantidad de invitados...</option>
+                            <option value="2">2 Personas (Pareja)</option>
+                            <option value="3">3 Personas</option>
+                            <option value="4">4 Personas (Familia)</option>
+                            <option value="5">5 Personas</option>
+                            <option value="6">6 a 10 Personas (Grupo)</option>
+                            <option value="10+">Más de 10 Personas (Evento Especial)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 text-sm font-bold text-gray-700">Solicitud Especial (Opcional)</label>
+                        <textarea id="notas" rows="3" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#D94D1A] focus:border-[#D94D1A] block w-full p-3.5 transition-all outline-none" placeholder="Ej. Es para un cumpleaños, necesitamos silla para bebé..."></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full text-white bg-gradient-to-r from-[#D94D1A] to-[#b53c15] hover:shadow-lg hover:shadow-orange-500/40 focus:ring-4 focus:outline-none focus:ring-orange-300 font-bold rounded-xl text-lg px-5 py-4 text-center transition-all transform active:scale-95 flex justify-center items-center gap-2 mt-4">
+                        <span>Confirmar Reserva</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </button>
+                </form>
+
+                <div id="successMessage" class="hidden text-center py-12 fade-in-up">
+                    <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                        <svg class="w-12 h-12 text-[#268C79]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-3">¡Reserva Solicitada!</h2>
+                    <p class="text-gray-600 text-lg mb-8 max-w-sm mx-auto">Hemos recibido tus datos correctamente. Nos pondremos en contacto contigo vía WhatsApp para confirmar tu mesa.</p>
+                    <button onclick="location.reload()" class="text-[#D94D1A] font-bold hover:underline">Hacer otra reserva</button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+<footer id="footer" class="opacity-0 translate-y-8 transition-all duration-700 relative z-10 mt-8 w-full">
+      
+      <div class="w-full leading-none overflow-hidden bg-[#D9C8A3]">
+        <svg class="block w-full h-16 sm:h-20 wave-animated" preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,0V46.29c47.79,22.2,103.59,29.05,158.39,17.39C230.69,51.24,284.83,9.56,339.57,2.9c54.74-6.67,104.86,16.77,157.43,26.22,86.91,16.15,172.28-12.56,258.86-18.5C853.43,4.61,933.14,30.12,1013,57.79c64.43,22.27,127.78,46.84,187,62.21V0Z" fill="#F4F2EF"></path>
+        </svg>
+      </div>
+
+      <div class="bg-gradient-to-b from-[#D9C8A3] via-[#E3E0DB] to-[#F4F2EF] pt-4 pb-8 px-5 sm:px-8 text-center">
+        
+        <div class="mb-8 mt-2">
+          <h3 class="text-lg font-semibold text-[#D94D1A] mb-1 flex items-center justify-center gap-1">📞 Contáctanos</h3>
+          <p class="text-sm text-gray-700">Tel: <a href="tel:+573001112233" class="text-[#D94D1A] font-medium hover:underline">+57 300 111 2233</a></p>
+          <p class="text-sm text-gray-700">Email: <a href="mailto:contacto@elarenal.com" class="text-[#D94D1A] hover:underline">contacto@elarenal.com</a></p>
+          <p class="text-sm text-gray-700 font-medium mt-1">📍 Kilómetro 10 vía Acacías</p>
+        </div>
+
+        <div class="mb-10 max-w-lg mx-auto">
+          <h3 class="text-lg font-semibold text-[#268C79] mb-4 flex items-center justify-center gap-2">🌐 Síguenos y Comparte</h3>
+          <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-6 px-4">
+            <a href="#" class="flex items-center justify-center gap-3 py-3 px-6 rounded-2xl bg-black/5 hover:bg-black/10 transition-colors active:scale-95">
+              <img src="./img/icono facebook.webp" alt="Facebook" class="w-8 h-8 footer-icon">
+              <span class="font-medium text-gray-800 text-[1.1rem]">Facebook</span>
+            </a>
+            <a href="#" class="flex items-center justify-center gap-3 py-3 px-6 rounded-2xl bg-black/5 hover:bg-black/10 transition-colors active:scale-95">
+              <img src="./img/icono instagram1.png" alt="Instagram" class="w-8 h-8 footer-icon">
+              <span class="font-medium text-gray-800 text-[1.1rem]">Instagram</span>
+            </a>
+            <a href="#" class="flex items-center justify-center gap-3 py-3 px-6 rounded-2xl bg-black/5 hover:bg-black/10 transition-colors active:scale-95">
+              <img src="./img/icono whatsapp.png" alt="WhatsApp" class="w-8 h-8 footer-icon">
+              <span class="font-medium text-gray-800 text-[1.1rem]">WhatsApp</span>
+            </a>
+          </div>
+        </div>
+        <div class="border-t border-[#D1C5B2] pt-6">
+          <h2 class="text-[#D94D1A] font-bold text-lg">Restaurante El Arenal</h2>
+          <p class="italic text-gray-700 text-sm mb-1">Tradición, sabor y frescura desde el llano</p>
+          <p class="text-xs text-gray-600">© 2026 Restaurante El Arenal. Todos los derechos reservados.</p>
+        </div>
+
+      </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+    <script>
+        // Animación del footer
+        document.addEventListener("DOMContentLoaded", () => {
+            const footer = document.getElementById("footer");
+            if(footer) {
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => { if (entry.isIntersecting) footer.classList.add("show-footer"); });
+                });
+                observer.observe(footer);
+            }
+        });
+    </script>
+    
+    <script src="/js/reservas-publico.js"></script>
+</body>
+</html>
+</body>
+</html>

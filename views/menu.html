@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menú - El Arenal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* Animación suave al filtrar */
+        .fade-in { animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: scale(0.95) translateY(10px); } 
+            to { opacity: 1; transform: scale(1) translateY(0); } 
+        }
+        /* Ola del Footer */
+        @keyframes waveMove { 0% { transform: translateX(0); } 50% { transform: translateX(-10px); } 100% { transform: translateX(0); } }
+        .wave-animated path { animation: waveMove 6s ease-in-out infinite; }
+        .show-footer { opacity: 1 !important; transform: translateY(0) !important; }
+    </style>
+</head>
+<body class="bg-[#F4F2EF] text-gray-800 font-sans flex flex-col min-h-screen">
+
+    <nav class="bg-[#E3E0DB] px-4 py-3 shadow-sm sticky top-0 z-50">
+        <div class="flex flex-wrap items-center justify-between mx-auto">
+            <a href="/" class="flex items-center space-x-3">
+                <img src="./img/logo.png" alt="Logo El Arenal" class="w-11 h-11 rounded-full drop-shadow" onerror="this.src='https://via.placeholder.com/44'" />
+                <span class="text-xl font-bold text-[#D94D1A] transition-colors hover:text-[#C28B16] tracking-tight">El Arenal</span>
+            </a>
+            
+            <div class="flex items-center gap-2 md:order-2">
+                <button data-collapse-toggle="navbar-menu" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-[#61161D] rounded-lg md:hidden hover:bg-[#d1c5b2] focus:outline-none focus:ring-2 focus:ring-[#D94D1A]">
+                    <span class="sr-only">Abrir menú principal</span>
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 17 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/></svg>
+                </button>
+            </div>
+
+            <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 mt-3 md:mt-0" id="navbar-menu">
+                <ul class="flex flex-col p-3 md:p-0 mt-2 border border-gray-200/80 rounded-2xl bg-white/95 backdrop-blur-md md:bg-transparent md:flex-row md:space-x-2 md:mt-0 md:border-0 shadow-xl shadow-black/5 md:shadow-none gap-2">
+                    <li><a href="/" class="flex items-center gap-3 py-3 px-4 text-gray-700 font-medium rounded-xl hover:bg-[#D94D1A]/10 hover:text-[#D94D1A] transition-all">
+                        <svg class="w-5 h-5 text-gray-400 group-hover:text-[#D94D1A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg> Inicio
+                    </a></li>
+                    <li><a href="/menu" class="flex items-center gap-3 py-3 px-4 text-[#D94D1A] bg-[#D94D1A]/10 font-bold rounded-xl transition-all">
+                        <svg class="w-5 h-5 text-[#D94D1A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg> Menú
+                    </a></li>
+                    <li><a href="/reservas" class="flex items-center gap-3 py-3 px-4 text-gray-700 font-medium rounded-xl hover:bg-[#D94D1A]/10 hover:text-[#D94D1A] transition-all">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> Reservas
+                    </a></li>
+                    <li><a href="/opiniones" class="flex items-center gap-3 py-3 px-4 text-gray-700 font-medium rounded-xl hover:bg-[#D94D1A]/10 hover:text-[#D94D1A] transition-all">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg> Opiniones
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="px-6 pt-6 pb-2 max-w-5xl mx-auto w-full">
+        
+        <a href="/" class="inline-flex items-center gap-2 text-gray-500 hover:text-[#D94D1A] font-medium mb-3 transition-colors group w-fit active:scale-95">
+            <div class="bg-white p-2 rounded-full shadow-sm border border-gray-200 group-hover:border-[#D94D1A] transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+            </div>
+            Volver al inicio
+        </a>
+        
+        <h2 class="text-4xl font-extrabold text-[#61161D] tracking-tight">Nuestro Menú 🍽️</h2>
+        <p class="text-gray-600 text-[15px] mt-2 leading-relaxed">Descubre el auténtico sabor llanero, preparado con tradición.</p>
+    </div>
+
+<div class="w-full bg-[#F4F2EF] sticky top-[68px] z-40 py-3 shadow-sm border-b border-gray-200/50 mb-6">
+        <div class="max-w-5xl mx-auto px-4 md:px-6">
+            <div class="flex overflow-x-auto no-scrollbar gap-2 pb-1 snap-x">
+                <button onclick="filterMenu('todos', this)" class="filter-btn shrink-0 snap-start bg-[#D94D1A] text-white px-5 py-2 rounded-full text-sm font-bold shadow-md shadow-orange-500/30 transition-all">Todos</button>
+                <button onclick="filterMenu('entradas', this)" class="filter-btn shrink-0 snap-start bg-white text-gray-600 border border-gray-200 px-5 py-2 rounded-full text-sm font-semibold hover:bg-gray-50 hover:text-[#D94D1A] transition-all shadow-sm">Entradas</button>
+                <button onclick="filterMenu('sopas', this)" class="filter-btn shrink-0 snap-start bg-white text-gray-600 border border-gray-200 px-5 py-2 rounded-full text-sm font-semibold hover:bg-gray-50 hover:text-[#D94D1A] transition-all shadow-sm">Sopas</button>
+                <button onclick="filterMenu('pescados', this)" class="filter-btn shrink-0 snap-start bg-white text-gray-600 border border-gray-200 px-5 py-2 rounded-full text-sm font-semibold hover:bg-gray-50 hover:text-[#D94D1A] transition-all shadow-sm">Pescados</button>
+            </div>
+        </div>
+    </div>
+
+<div id="contenedorMenu" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 fade-in max-w-5xl mx-auto px-4 md:px-6 mb-20 w-full">
+        
+        <div class="col-span-full text-center py-12 text-gray-400 font-bold flex flex-col items-center">
+            <svg class="animate-spin h-10 w-10 text-[#D94D1A] mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            Preparando la mesa...
+        </div>
+
+    </div>
+
+
+    <footer id="footer" class="opacity-0 translate-y-8 transition-all duration-700 relative z-10 mt-8 w-full">
+      
+      <div class="w-full leading-none overflow-hidden bg-[#D9C8A3]">
+        <svg class="block w-full h-16 sm:h-20 wave-animated" preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,0V46.29c47.79,22.2,103.59,29.05,158.39,17.39C230.69,51.24,284.83,9.56,339.57,2.9c54.74-6.67,104.86,16.77,157.43,26.22,86.91,16.15,172.28-12.56,258.86-18.5C853.43,4.61,933.14,30.12,1013,57.79c64.43,22.27,127.78,46.84,187,62.21V0Z" fill="#F4F2EF"></path>
+        </svg>
+      </div>
+
+      <div class="bg-gradient-to-b from-[#D9C8A3] via-[#E3E0DB] to-[#F4F2EF] pt-4 pb-8 px-5 sm:px-8 text-center">
+        
+        <div class="mb-8 mt-2">
+          <h3 class="text-lg font-semibold text-[#D94D1A] mb-1 flex items-center justify-center gap-1">📞 Contáctanos</h3>
+          <p class="text-sm text-gray-700">Tel: <a href="tel:+573001112233" class="text-[#D94D1A] font-medium hover:underline">+57 300 111 2233</a></p>
+          <p class="text-sm text-gray-700">Email: <a href="mailto:contacto@elarenal.com" class="text-[#D94D1A] hover:underline">contacto@elarenal.com</a></p>
+          <p class="text-sm text-gray-700 font-medium mt-1">📍 Kilómetro 10 vía Acacías</p>
+        </div>
+
+        <div class="mb-10 max-w-lg mx-auto">
+          <h3 class="text-lg font-semibold text-[#268C79] mb-4 flex items-center justify-center gap-2">🌐 Síguenos y Comparte</h3>
+          <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-6 px-4">
+            <a href="#" class="flex items-center justify-center gap-3 py-3 px-6 rounded-2xl bg-black/5 hover:bg-black/10 transition-colors active:scale-95">
+              <img src="./img/icono facebook.webp" alt="Facebook" class="w-8 h-8 footer-icon">
+              <span class="font-medium text-gray-800 text-[1.1rem]">Facebook</span>
+            </a>
+            <a href="#" class="flex items-center justify-center gap-3 py-3 px-6 rounded-2xl bg-black/5 hover:bg-black/10 transition-colors active:scale-95">
+              <img src="./img/icono instagram1.png" alt="Instagram" class="w-8 h-8 footer-icon">
+              <span class="font-medium text-gray-800 text-[1.1rem]">Instagram</span>
+            </a>
+            <a href="#" class="flex items-center justify-center gap-3 py-3 px-6 rounded-2xl bg-black/5 hover:bg-black/10 transition-colors active:scale-95">
+              <img src="./img/icono whatsapp.png" alt="WhatsApp" class="w-8 h-8 footer-icon">
+              <span class="font-medium text-gray-800 text-[1.1rem]">WhatsApp</span>
+            </a>
+          </div>
+        </div>
+        <div class="border-t border-[#D1C5B2] pt-6">
+          <h2 class="text-[#D94D1A] font-bold text-lg">Restaurante El Arenal</h2>
+          <p class="italic text-gray-700 text-sm mb-1">Tradición, sabor y frescura desde el llano</p>
+          <p class="text-xs text-gray-600">© 2026 Restaurante El Arenal. Todos los derechos reservados.</p>
+        </div>
+
+      </div>
+    </footer>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+    <script>
+        // Script de filtrado mejorado para tarjetas flex-col
+        function filterMenu(category, btnElement) {
+            const items = document.querySelectorAll('.menu-item');
+            items.forEach(item => {
+                item.classList.remove('fade-in');
+                if (category === 'todos' || item.getAttribute('data-category') === category) {
+                    item.style.display = 'flex'; // Usamos flex porque las tarjetas nuevas son flex-col
+                    void item.offsetWidth; 
+                    item.classList.add('fade-in');
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.className = 'filter-btn bg-white text-gray-600 border border-gray-200 px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-gray-50 hover:text-[#D94D1A] mr-2 transition-all shadow-sm';
+            });
+            btnElement.className = 'filter-btn bg-[#D94D1A] text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-md shadow-orange-500/30 mr-2 transition-all';
+        }
+
+        // Script del footer animado
+        document.addEventListener("DOMContentLoaded", () => {
+            const footer = document.getElementById("footer");
+            if(footer) {
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => { if (entry.isIntersecting) footer.classList.add("show-footer"); });
+                });
+                observer.observe(footer);
+            }
+        });
+    </script>
+    <script src="./js/menu-publico.js"></script>
+</body>
+</html>
