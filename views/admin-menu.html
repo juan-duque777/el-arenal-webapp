@@ -145,16 +145,23 @@
                         </div>
                         <div class="col-span-2 sm:col-span-1">
                             <label class="block mb-2 text-sm font-bold text-gray-900">Precio (COP)</label>
-                            <input type="number" id="precioPlato" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#D94D1A] focus:border-[#D94D1A] block w-full p-3 outline-none" placeholder="35000" required>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                    <span class="text-gray-500 font-bold text-sm">$</span>
+                                </div>
+                                <input type="number" id="precioPlato" name="precio" min="0" step="50" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#D94D1A] focus:border-[#D94D1A] block w-full ps-9 p-3 shadow-sm transition-colors outline-none" placeholder="Ej: 35000" required>
+                            </div>
                         </div>
                         <div class="col-span-2 sm:col-span-1">
                             <label class="block mb-2 text-sm font-bold text-gray-900">Categoría</label>
                             <select id="categoriaPlato" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#D94D1A] focus:border-[#D94D1A] block w-full p-3 outline-none" required>
-                                <option value="" selected disabled>Seleccionar...</option>
-                                <option value="1">Pescados</option>
-                                <option value="2">Carnes</option>
-                                <option value="3">Sopas</option>
-                                <option value="4">Entradas</option>
+                                <option value="" disabled selected>Seleccione una categoría</option>
+                                <option value="Pescados">Pescados</option>
+                                <option value="Carnes">Carnes</option>
+                                <option value="Cazuelas">Cazuelas</option>
+                                <option value="Arroces">Arroces</option>
+                                <option value="Bebidas">Bebidas</option>
+                                <option value="Adicionales">Adicionales</option>
                             </select>
                         </div>
                         <div class="col-span-2">
@@ -164,7 +171,7 @@
                         
                         <div class="col-span-2">
                             <label class="block mb-2 text-sm font-bold text-gray-900">Foto del Plato</label>
-                            <input id="imagenPlato" class="block w-full text-sm text-gray-500 border border-gray-200 rounded-xl cursor-pointer bg-gray-50 focus:outline-none file:mr-4 file:py-3 file:px-4 file:rounded-l-xl file:border-0 file:text-sm file:font-semibold file:bg-[#E3E0DB] file:text-[#61161D] hover:file:bg-gray-200" type="file" accept="image/*">
+                            <input name="imagen" id="imagenPlato" class="block w-full text-sm text-gray-500 border border-gray-200 rounded-xl cursor-pointer bg-gray-50 focus:outline-none file:mr-4 file:py-3 file:px-4 file:rounded-l-xl file:border-0 file:text-sm file:font-semibold file:bg-[#E3E0DB] file:text-[#61161D] hover:file:bg-gray-200" type="file" accept="image/*">
                         </div>
                     </div>
                     <button type="submit" class="text-white inline-flex items-center bg-[#268C79] hover:bg-[#1e7061] focus:ring-4 focus:outline-none focus:ring-green-300 font-bold rounded-xl text-sm px-5 py-3 text-center transition-all w-full justify-center mt-2 shadow-md active:scale-95">
@@ -199,16 +206,23 @@
                         </div>
                         <div class="col-span-2 sm:col-span-1">
                             <label class="block mb-2 text-sm font-bold text-gray-900">Precio (COP)</label>
-                            <input type="number" id="editPrecioPlato" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 outline-none" required>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                    <span class="text-gray-500 font-bold text-sm">$</span>
+                                </div>
+                                <input type="number" id="editPrecioPlato" name="precio" min="0" step="50" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full ps-9 p-3 shadow-sm transition-colors outline-none" placeholder="Ej: 35000" required>
+                            </div>
                         </div>
                         <div class="col-span-2 sm:col-span-1">
                             <label class="block mb-2 text-sm font-bold text-gray-900">Categoría</label>
                             <select id="editCategoriaPlato" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 outline-none" required>
-                                <option value="" selected disabled>Seleccionar...</option>
-                                <option value="1">Pescados</option>
-                                <option value="2">Carnes</option>
-                                <option value="3">Sopas</option>
-                                <option value="4">Entradas</option>
+                                <option value="" disabled selected>Seleccione una categoría</option>
+                                <option value="Pescados">Pescados</option>
+                                <option value="Carnes">Carnes</option>
+                                <option value="Cazuelas">Cazuelas</option>
+                                <option value="Arroces">Arroces</option>
+                                <option value="Bebidas">Bebidas</option>
+                                <option value="Adicionales">Adicionales</option>
                             </select>
                         </div>
                         <div class="col-span-2">
@@ -217,8 +231,11 @@
                         </div>
 
                         <div class="col-span-2">
-                            <label class="block mb-2 text-sm font-bold text-gray-900">Actualizar Foto (Opcional)</label>
-                            <input id="editImagenPlato" class="block w-full text-sm text-gray-500 border border-gray-200 rounded-xl cursor-pointer bg-gray-50 focus:outline-none file:mr-4 file:py-3 file:px-4 file:rounded-l-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200" type="file" accept="image/*">
+                            <label class="block mb-2 text-sm font-bold text-gray-900">Foto Actual / Actualizar (Opcional)</label>
+                            <div class="flex items-center gap-4 mb-3">
+                                <img id="editImagenActual" src="" alt="Foto del plato" class="w-16 h-16 object-cover rounded-xl border border-gray-200 shadow-sm">
+                                <input id="editImagenPlato" class="block w-full text-sm text-gray-500 border border-gray-200 rounded-xl cursor-pointer bg-gray-50 focus:outline-none file:mr-4 file:py-3 file:px-4 file:rounded-l-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200" type="file" accept="image/*">
+                            </div>
                         </div>
                     </div>
                     <button type="submit" class="text-white inline-flex items-center bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-bold rounded-xl text-sm px-5 py-3 text-center transition-all w-full justify-center mt-2 shadow-md active:scale-95">

@@ -21,10 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 3. Recorremos los platos
             platos.forEach(plato => {
-                const categoriaFiltro = categoriasFiltro[plato.categoria_id] || 'otros';
+                const categoriaFiltro = plato.categoria || 'Adicionales';
                 const precio = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(plato.precio);
-                const img = plato.imagen_url ? plato.imagen_url : 'https://via.placeholder.com/400x300?text=Sabor+Llanero';
 
+                const img = plato.imagen ? plato.imagen : 'https://via.placeholder.com/400x300?text=Sabor+Llanero';
                 // ==========================================
                 // 🎨 NUEVO DISEÑO DE TARJETA (Imagen con margen y botón de reserva)
                 // ==========================================

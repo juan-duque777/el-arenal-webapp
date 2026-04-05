@@ -20,12 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const renderizarHTML = (platosA_Dibujar) => {
         let htmlTabla = '';
         let htmlMovil = '';
-        const nombresCategorias = { 1: 'Pescados', 2: 'Carnes', 3: 'Sopas', 4: 'Entradas' };
 
         platosA_Dibujar.forEach(plato => {
-            const cat = nombresCategorias[plato.categoria_id] || 'Otro';
+            const cat = plato.categoria || 'Sin Categoría';
             const precio = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(plato.precio);
-            const img = plato.imagen_url ? plato.imagen_url : 'https://via.placeholder.com/100?text=Sin+Foto';
+            const img = plato.imagen ? plato.imagen : 'https://via.placeholder.com/100?text=Sin+Foto';
 
             htmlTabla += `
                 <tr class="bg-white hover:bg-gray-50 transition">
@@ -150,9 +149,11 @@ window.prepararEdicion = (id) => {
 
     document.getElementById('editNombrePlato').value = plato.nombre;
     document.getElementById('editPrecioPlato').value = plato.precio;
-    document.getElementById('editCategoriaPlato').value = plato.categoria_id || "";
+    document.getElementById('editCategoriaPlato').value = plato.categoria || "";
     document.getElementById('editDescripcionPlato').value = plato.descripcion || "";
     document.getElementById('editImagenPlato').value = "";
+
+    document.getElementById('editImagenActual').src = plato.imagen ? plato.imagen : 'https://via.placeholder.com/100?text=Sin+Foto';
 
     platoEnEdicionId = id;
     document.getElementById('btnAbrirEditModal').click();
