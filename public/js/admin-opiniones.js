@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 2. CARGAR TODAS LAS OPINIONES ---
     window.cargarOpinionesAdmin = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/opiniones');
+            const response = await fetch('/api/opiniones');
             listaOpinionesGlobal = await response.json();
             
             // Volvemos a aplicar el filtro actual al recargar
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 4. FUNCIONES DE ACCIÓN (Visibilidad, Responder, Eliminar) ---
     window.cambiarVisibilidad = async (id, estadoVisible) => {
         try {
-            await fetch(`http://localhost:3000/api/opiniones/${id}/visibilidad`, {
+            await fetch(`/api/opiniones/${id}/visibilidad`, {
                 method: 'PUT', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ visible: estadoVisible })
             });
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.eliminar = async (id) => {
         if(confirm("⚠️ ¿Estás seguro de eliminar esta opinión PARA SIEMPRE?")) {
             try {
-                await fetch(`http://localhost:3000/api/opiniones/${id}`, { method: 'DELETE' });
+                await fetch(`/api/opiniones/${id}`, { method: 'DELETE' });
                 cargarOpinionesAdmin();
             } catch(e) { alert("❌ Error de conexión"); }
         }
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const respuesta = prompt("Escribe tu respuesta pública para este cliente:");
         if (respuesta && respuesta.trim() !== "") {
             try {
-                await fetch(`http://localhost:3000/api/opiniones/${id}/respuesta`, {
+                await fetch(`/api/opiniones/${id}/respuesta`, {
                     method: 'PUT', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ respuesta: respuesta.trim() })
                 });

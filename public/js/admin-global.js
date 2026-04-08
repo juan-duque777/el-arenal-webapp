@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. La función espía (Vigila la base de datos)
     const vigilarReservas = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/reservas');
+            const response = await fetch('/api/reservas');
             if (!response.ok) return;
             
             const reservas = await response.json();

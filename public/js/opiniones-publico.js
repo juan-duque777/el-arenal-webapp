@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cargarOpiniones = async () => {
         try {
             // Pedimos a la API SOLO las opiniones visibles
-            const response = await fetch('http://localhost:3000/api/opiniones?soloVisibles=true');
+            const response = await fetch('/api/opiniones?soloVisibles=true');
             const opiniones = await response.json();
             
             const totalOpiniones = opiniones.length;
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             try {
-                const response = await fetch('http://localhost:3000/api/opiniones', {
+                const response = await fetch('/api/opiniones', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(datosOpinion)

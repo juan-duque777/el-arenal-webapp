@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const cargarDashboard = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/dashboard');
+            const response = await fetch('/api/dashboard');
             const data = await response.json();
 
             // 1. Pintar Estadísticas Principales

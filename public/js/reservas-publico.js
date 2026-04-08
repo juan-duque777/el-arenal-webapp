@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 // 2. Enviamos la petición POST a nuestra API (La cocina)
-                const response = await fetch('http://localhost:3000/api/reservas', {
+                const response = await fetch('/api/reservas', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

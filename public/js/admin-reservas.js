@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 1. CARGAR RESERVAS DESDE LA BASE DE DATOS ---
     window.cargarReservas = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/reservas');
+            const response = await fetch('/api/reservas');
             listaReservasGlobal = await response.json();
             
             // Calculamos cuántas pendientes hay para la bolita de notificaciones
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (confirm(mensajeConfirmacion)) {
             try {
-                const response = await fetch(`http://localhost:3000/api/reservas/${id}`, {
+                const response = await fetch(`/api/reservas/${id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ estado: nuevoEstado })
