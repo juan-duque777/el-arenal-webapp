@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cargarMenuPublico = async () => {
         try {
             // 1. Pedimos los datos a la cocina (Nuestra API REST)
-            const response = await fetch('http://localhost:3000/api/platos');
+            const response = await fetch('/api/platos');
             const platos = await response.json();
 
             let htmlMenu = '';

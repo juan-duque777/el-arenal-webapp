@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.cargarPlatos = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/platos');
+            const response = await fetch('/api/platos');
             listaPlatos = await response.json(); 
             renderizarHTML(listaPlatos); 
         } catch (error) { console.error("Error al cargar la tabla:", error); }
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if(archivo) formData.append('imagen', archivo);
 
             try {
-                const response = await fetch('http://localhost:3000/api/platos', {
+                const response = await fetch('/api/platos', {
                     method: 'POST',
                     body: formData
                 });
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if(archivo) formData.append('imagen', archivo);
 
             try {
-                const response = await fetch(`http://localhost:3000/api/platos/${platoEnEdicionId}`, {
+                const response = await fetch(`/api/platos/${platoEnEdicionId}`, {
                     method: 'PUT',
                     body: formData
                 });
@@ -162,7 +162,7 @@ window.prepararEdicion = (id) => {
 window.borrarPlato = async (id) => {
     if (confirm("⚠️ ¿Estás seguro de que quieres eliminar este plato y su imagen para siempre?")) {
         try {
-            const response = await fetch(`http://localhost:3000/api/platos/${id}`, { method: 'DELETE' });
+            const response = await fetch(`/api/platos/${id}`, { method: 'DELETE' });
             const data = await response.json();
             if (response.ok) {
                 alert("✅ " + data.mensaje);
