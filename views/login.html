@@ -113,19 +113,53 @@
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const email = document.getElementById('email').value;
+
+            const email    = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorMsg = document.getElementById('errorMsg');
+            const btn      = document.querySelector('button[type="submit"]');
 
-            // Credenciales maestras
-            if (email === "admin@elarenal.com" && password === "1234") {
-                window.location.href = "/admin";
-            } else {
+            // Estado de carga
+            btn.disabled = true;
+            btn.innerHTML = `<svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg> Verificando...`;
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // El servidor ya seteó la cookie httpOnly — solo redirigimos
+                    window.location.href = data.redirect;
+                } else {
+                    // Mostrar error
+                    errorMsg.classList.remove('hidden');
+                    document.querySelector('main').classList.add('animate-pulse');
+                    setTimeout(() => document.querySelector('main').classList.remove('animate-pulse'), 500);
+
+                    btn.disabled = false;
+                    btn.innerHTML = `<span>Ingresar al Sistema</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>`;
+                }
+            } catch (err) {
+                console.error('Error de red:', err);
                 errorMsg.classList.remove('hidden');
-                document.querySelector('main').classList.add('animate-pulse');
-                setTimeout(() => { document.querySelector('main').classList.remove('animate-pulse'); }, 500);
+                btn.disabled = false;
+                btn.innerHTML = `<span>Ingresar al Sistema</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>`;
             }
         });
     </script>

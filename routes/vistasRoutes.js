@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+const validarToken = require('../middlewares/validartoken');
+const anticache = require('../middlewares/anticache');
 
 // ==============================
-// 🟢 RUTAS PÚBLICAS (Para tus clientes)
+// 🟢 RUTAS PÚBLICAS
 // ==============================
 router.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/index.html'));
@@ -17,33 +19,35 @@ router.get('/reservas', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/reservas.html'));
 });
 
-router.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/login.html'));
-});
-
 router.get('/opiniones', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/opiniones.html'));
 });
 
+router.get('/login', (req, res) => {
+    // Si ya tiene sesión activa, lo mandamos directo al admin
+    const token = req.cookies.token;
+    if (token) return res.redirect('/admin');
+    res.sendFile(path.join(__dirname, '../views/login.html'));
+});
 
 // ==============================
-// 🔴 RUTAS PRIVADAS (Para el Administrador)
+// 🔴 RUTAS PRIVADAS (Admin)
+// validarToken → verifica JWT en cookie
+// anticache    → evita que el navegador guarde estas páginas
 // ==============================
-// Nota: Más adelante pondremos aquí el middleware para bloquearlas si no hay sesión iniciada
-
-router.get('/admin', (req, res) => {
+router.get('/admin',          validarToken, anticache, (req, res) => {
     res.sendFile(path.join(__dirname, '../views/admin.html'));
 });
 
-router.get('/admin-menu', (req, res) => {
+router.get('/admin-menu',     validarToken, anticache, (req, res) => {
     res.sendFile(path.join(__dirname, '../views/admin-menu.html'));
 });
 
-router.get('/admin-reservas', (req, res) => {
+router.get('/admin-reservas', validarToken, anticache, (req, res) => {
     res.sendFile(path.join(__dirname, '../views/admin-reservas.html'));
 });
 
-router.get('/admin-opiniones', (req, res) => {
+router.get('/admin-opiniones',validarToken, anticache, (req, res) => {
     res.sendFile(path.join(__dirname, '../views/admin-opiniones.html'));
 });
 
