@@ -22,25 +22,30 @@ document.addEventListener('DOMContentLoaded', () => {
         let htmlMovil = '';
 
         platosA_Dibujar.forEach(plato => {
-            const cat = plato.categoria || 'Sin Categoría';
+            const cat = escapeHTML(plato.categoria || 'Sin Categoría');
             const precio = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(plato.precio);
-            const img = plato.imagen ? plato.imagen : 'https://via.placeholder.com/100?text=Sin+Foto';
+            const img = typeof plato.imagen === 'string' && /^\/uploads\/[A-Za-z0-9._-]+$/.test(plato.imagen)
+                ? plato.imagen
+                : 'https://via.placeholder.com/100?text=Sin+Foto';
+            const nombre = escapeHTML(plato.nombre);
+            const descripcion = escapeHTML(plato.descripcion || '');
+            const platoId = Number.isSafeInteger(Number(plato.id)) ? Number(plato.id) : 0;
 
             htmlTabla += `
                 <tr class="bg-white hover:bg-gray-50 transition">
                     <td class="px-6 py-4 flex items-center gap-4">
-                        <img src="${img}" class="w-14 h-14 rounded-xl object-cover shadow-sm">
+                        <img src="${escapeHTML(img)}" class="w-14 h-14 rounded-xl object-cover shadow-sm">
                         <div>
-                            <div class="font-bold text-gray-900 text-base">${plato.nombre}</div>
-                            <p class="text-xs text-gray-500 w-48 truncate">${plato.descripcion || ''}</p>
+                            <div class="font-bold text-gray-900 text-base">${nombre}</div>
+                            <p class="text-xs text-gray-500 w-48 truncate">${descripcion}</p>
                         </div>
                     </td>
                     <td class="px-6 py-4"><span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">${cat}</span></td>
                     <td class="px-6 py-4 font-extrabold text-[#D94D1A] text-base">${precio}</td>
                     <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full">Activo</span></td>
                     <td class="px-6 py-4 text-right">
-                        <button onclick="prepararEdicion(${plato.id})" class="text-blue-500 hover:text-blue-700 font-bold mr-3">Editar</button>
-                        <button onclick="borrarPlato(${plato.id})" class="text-red-400 hover:text-red-600 font-bold">Borrar</button>
+                        <button onclick="prepararEdicion(${platoId})" class="text-blue-500 hover:text-blue-700 font-bold mr-3">Editar</button>
+                        <button onclick="borrarPlato(${platoId})" class="text-red-400 hover:text-red-600 font-bold">Borrar</button>
                     </td>
                 </tr>
             `;
@@ -48,15 +53,15 @@ document.addEventListener('DOMContentLoaded', () => {
             htmlMovil += `
                 <div class="p-5 bg-white flex flex-col gap-3">
                     <div class="flex items-center gap-4">
-                        <img src="${img}" class="w-20 h-20 rounded-2xl object-cover shadow-sm">
+                        <img src="${escapeHTML(img)}" class="w-20 h-20 rounded-2xl object-cover shadow-sm">
                         <div class="flex-1">
-                            <h3 class="font-bold text-gray-900 text-lg leading-tight">${plato.nombre}</h3>
+                            <h3 class="font-bold text-gray-900 text-lg leading-tight">${nombre}</h3>
                             <span class="text-[#D94D1A] font-extrabold text-lg">${precio}</span>
                         </div>
                     </div>
                     <div class="flex justify-end gap-4 mt-2">
-                        <button onclick="prepararEdicion(${plato.id})" class="text-blue-500 font-bold text-sm">Editar</button>
-                        <button onclick="borrarPlato(${plato.id})" class="text-red-500 font-bold text-sm">Borrar</button>
+                        <button onclick="prepararEdicion(${platoId})" class="text-blue-500 font-bold text-sm">Editar</button>
+                        <button onclick="borrarPlato(${platoId})" class="text-red-500 font-bold text-sm">Borrar</button>
                     </div>
                 </div>
             `;
@@ -153,7 +158,9 @@ window.prepararEdicion = (id) => {
     document.getElementById('editDescripcionPlato').value = plato.descripcion || "";
     document.getElementById('editImagenPlato').value = "";
 
-    document.getElementById('editImagenActual').src = plato.imagen ? plato.imagen : 'https://via.placeholder.com/100?text=Sin+Foto';
+    document.getElementById('editImagenActual').src = typeof plato.imagen === 'string' && /^\/uploads\/[A-Za-z0-9._-]+$/.test(plato.imagen)
+        ? plato.imagen
+        : 'https://via.placeholder.com/100?text=Sin+Foto';
 
     platoEnEdicionId = id;
     document.getElementById('btnAbrirEditModal').click();

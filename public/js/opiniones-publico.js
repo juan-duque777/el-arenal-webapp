@@ -72,17 +72,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         const htmlRespuesta = op.respuesta ? `
                             <div class="mt-4 bg-[#fcf8f2] p-4 rounded-xl border border-[#e8d5c4]">
                                 <p class="text-xs font-bold text-[#D94D1A] mb-1 flex items-center gap-1">👑 Respuesta de El Arenal:</p>
-                                <p class="text-sm text-gray-700 italic leading-relaxed">"${op.respuesta}"</p>
+                                <p class="text-sm text-gray-700 italic leading-relaxed">"${escapeHTML(op.respuesta)}"</p>
                             </div>
                         ` : '';
 
                         html += `
                         <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow fade-in-up">
                             <div class="flex items-center justify-between mb-4">
-                                <h3 class="font-bold text-gray-900 text-lg capitalize">${op.nombre}</h3>
+                                <h3 class="font-bold text-gray-900 text-lg capitalize">${escapeHTML(op.nombre)}</h3>
                                 <div class="flex gap-1">${estrellasHtml}</div>
                             </div>
-                            <p class="text-gray-600 italic mb-2 leading-relaxed">"${op.comentario}"</p>
+                            <p class="text-gray-600 italic mb-2 leading-relaxed">"${escapeHTML(op.comentario)}"</p>
                             
                             ${htmlRespuesta}
 

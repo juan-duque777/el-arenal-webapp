@@ -59,6 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let html = '';
         opiniones.forEach(op => {
+            const opinionId = Number.isSafeInteger(Number(op.id)) ? Number(op.id) : 0;
+            const nombre = escapeHTML(op.nombre);
+            const comentario = escapeHTML(op.comentario);
             const fechaObj = new Date(op.fecha_creacion);
             fechaObj.setMinutes(fechaObj.getMinutes() + fechaObj.getTimezoneOffset());
             const fechaFormateada = fechaObj.toLocaleDateString('es-CO', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -74,8 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 : `<span class="bg-gray-200 text-gray-600 px-3 py-1 rounded-full text-[10px] font-bold border border-gray-300 uppercase">Oculta</span>`;
 
             const btnVisible = esVisible
-                ? `<button onclick="cambiarVisibilidad(${op.id}, false)" class="text-xs font-bold text-orange-500 hover:underline">Ocultar</button>`
-                : `<button onclick="cambiarVisibilidad(${op.id}, true)" class="text-xs font-bold text-green-600 hover:underline">Mostrar</button>`;
+                ? `<button onclick="cambiarVisibilidad(${opinionId}, false)" class="text-xs font-bold text-orange-500 hover:underline">Ocultar</button>`
+                : `<button onclick="cambiarVisibilidad(${opinionId}, true)" class="text-xs font-bold text-green-600 hover:underline">Mostrar</button>`;
 
             const estiloTarjeta = esVisible ? 'bg-white opacity-100' : 'bg-gray-50 opacity-60';
 
@@ -83,21 +86,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const htmlRespuesta = op.respuesta 
                 ? `<div class="mt-3 bg-blue-50 p-3 rounded-lg border border-blue-100">
                      <p class="text-[11px] font-bold text-blue-800 mb-1">Tu respuesta:</p>
-                     <p class="text-xs text-blue-900 italic">"${op.respuesta}"</p>
+                     <p class="text-xs text-blue-900 italic">"${escapeHTML(op.respuesta)}"</p>
                    </div>`
-                : `<button onclick="responder(${op.id})" class="mt-3 text-xs font-bold text-blue-600 hover:underline flex items-center gap-1">💬 Responder al cliente</button>`;
+                : `<button onclick="responder(${opinionId})" class="mt-3 text-xs font-bold text-blue-600 hover:underline flex items-center gap-1">💬 Responder al cliente</button>`;
 
             html += `
             <article class="${estiloTarjeta} border border-gray-200 rounded-3xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col relative">
                 <div class="flex justify-between items-start mb-2">
                     <div>
-                        <h4 class="font-bold text-gray-900 text-md capitalize">${op.nombre}</h4>
+                        <h4 class="font-bold text-gray-900 text-md capitalize">${nombre}</h4>
                         <span class="text-[10px] text-gray-400 font-medium">${fechaFormateada}</span>
                     </div>
                     <div class="flex">${estrellasHtml}</div>
                 </div>
                 
-                <p class="text-sm text-gray-600 italic mb-2 leading-relaxed flex-grow">"${op.comentario}"</p>
+                <p class="text-sm text-gray-600 italic mb-2 leading-relaxed flex-grow">"${comentario}"</p>
                 
                 ${htmlRespuesta}
                 
@@ -106,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${badgeVisible}
                         ${btnVisible}
                     </div>
-                    <button onclick="eliminar(${op.id})" class="text-xs font-bold text-red-500 hover:text-red-700 hover:underline">🗑️ Eliminar</button>
+                    <button onclick="eliminar(${opinionId})" class="text-xs font-bold text-red-500 hover:text-red-700 hover:underline">🗑️ Eliminar</button>
                 </div>
             </article>`;
         });

@@ -6,8 +6,8 @@ const validarToken = require('../middlewares/validartoken');
 
 router.get('/', platosController.obtenerPlatos);
 // Le decimos que intercepte un archivo llamado 'imagen' antes de ir al controlador
-router.post('/', validarToken, upload.single('imagen'), platosController.crearPlato); 
-router.put('/:id', validarToken, upload.single('imagen'), platosController.actualizarPlato);
+router.post('/', validarToken, upload, platosController.crearPlato);
+router.put('/:id', validarToken, upload, platosController.actualizarPlato);
 router.delete('/:id', validarToken, platosController.eliminarPlato);
 
 module.exports = router;
