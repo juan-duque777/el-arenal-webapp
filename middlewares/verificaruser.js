@@ -13,7 +13,7 @@ const secretHash = process.env.SALTAPP_SECRET;
 // Lectura actualizada de usuarios (igual que en el SENA)
 function traerUsuarios() {
     const data = fs.readFileSync(
-        path.join(__dirname, '../public/data/usuarios.json'),
+        path.join(__dirname, '../data/usuarios.json'),
         'utf8'
     );
     return JSON.parse(data);

@@ -13,7 +13,9 @@ function validarToken(req, res, next) {
     const token = req.cookies.token;
 
     if (!token) {
-        // Si no hay token, redirige al login
+        if (req.originalUrl.startsWith('/api/')) {
+            return res.status(401).json({ error: 'Autenticación requerida' });
+        }
         return res.redirect('/login');
     }
 
@@ -22,6 +24,9 @@ function validarToken(req, res, next) {
             console.log('⚠️  Token inválido o expirado');
             // Limpiamos la cookie corrupta y mandamos al login
             res.clearCookie('token');
+            if (req.originalUrl.startsWith('/api/')) {
+                return res.status(401).json({ error: 'Token inválido o expirado' });
+            }
             return res.redirect('/login');
         }
         // Todo bien, guardamos los datos del usuario en el request

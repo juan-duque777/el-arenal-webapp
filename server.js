@@ -6,24 +6,28 @@ const db = require('./database/db.js');
 
 global._baseDir = __dirname;
 
-// ── Auto-generar usuarios.json si no existe (para producción) ──
 const fs = require('fs');
 const path = require('path');
 const bcryptjs = require('bcryptjs');
 
-const usuariosPath = path.join(__dirname, 'public/data/usuarios.json');
+const usuariosPath = path.join(__dirname, 'data', 'usuarios.json');
 
-if (!fs.existsSync(usuariosPath)) {
+async function asegurarUsuarios() {
+    if (fs.existsSync(usuariosPath)) return;
+
     const saltSecret = process.env.SALTAPP_SECRET;
     const adminPass  = process.env.ADMIN_PASSWORD;
     const adminEmail = process.env.ADMIN_EMAIL;
 
-    bcryptjs.hash(adminPass + saltSecret, 12).then(hash => {
-        const usuarios = [{ email: adminEmail, password: hash, rol: 'administrador' }];
-        fs.mkdirSync(path.dirname(usuariosPath), { recursive: true });
-        fs.writeFileSync(usuariosPath, JSON.stringify(usuarios, null, 2));
-        console.log('✅ usuarios.json generado automáticamente');
-    });
+    if (!saltSecret || !adminPass || !adminEmail) {
+        throw new Error('Faltan SALTAPP_SECRET, ADMIN_PASSWORD o ADMIN_EMAIL para crear data/usuarios.json');
+    }
+
+    const hash = await bcryptjs.hash(adminPass + saltSecret, 12);
+    const usuarios = [{ email: adminEmail, password: hash, rol: 'administrador' }];
+    fs.mkdirSync(path.dirname(usuariosPath), { recursive: true });
+    fs.writeFileSync(usuariosPath, JSON.stringify(usuarios, null, 2));
+    console.log('✅ data/usuarios.json generado automáticamente');
 }
 
 const app = express();
@@ -64,6 +68,14 @@ app.use('/api/dashboard', dashboardRoutes);
  
 // ── SERVIDOR ──────────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`🔥 Servidor corriendo en http://localhost:${PORT}`);
-});
+
+asegurarUsuarios()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`🔥 Servidor corriendo en http://localhost:${PORT}`);
+        });
+    })
+    .catch(error => {
+        console.error('❌ No se pudo preparar el usuario administrador:', error.message);
+        process.exitCode = 1;
+    });
