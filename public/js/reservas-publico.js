@@ -3,6 +3,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const reservaForm = document.getElementById('reservaForm');
     const successMessage = document.getElementById('successMessage');
     const fechaInput = document.getElementById('fecha');
+    const horaInput = document.getElementById('hora');
+    const horaError = document.getElementById('horaError');
+    const reservaError = document.getElementById('reservaError');
+
+    const validarHorario = () => {
+        const hora = horaInput.value;
+        const horarioValido = !hora || (hora >= '12:00' && hora <= '22:00');
+        horaError.textContent = horarioValido ? '' : 'El horario de atención para reservas es de 12:00 p. m. a 10:00 p. m.';
+        horaError.classList.toggle('hidden', horarioValido);
+        horaInput.setAttribute('aria-invalid', String(!horarioValido));
+        return horarioValido;
+    };
+
+    if (horaInput) {
+        horaInput.addEventListener('input', validarHorario);
+        horaInput.addEventListener('change', validarHorario);
+        horaInput.addEventListener('invalid', () => {
+            if (horaInput.validity.rangeUnderflow || horaInput.validity.rangeOverflow) {
+                validarHorario();
+            }
+        });
+    }
 
     if (fechaInput) {
         fechaInput.min = new Intl.DateTimeFormat('en-CA', {
@@ -16,6 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (reservaForm) {
         reservaForm.addEventListener('submit', async function(e) {
             e.preventDefault(); // Evitamos que la página se recargue al enviar
+            if (!validarHorario()) {
+                horaInput.focus();
+                return;
+            }
+            horaError.classList.add('hidden');
+            reservaError.classList.add('hidden');
             const submitButton = reservaForm.querySelector('button[type="submit"]');
             const contenidoOriginal = submitButton.innerHTML;
             submitButton.disabled = true;
@@ -51,13 +79,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Opcional: Limpiamos el formulario por si acaso
                     reservaForm.reset();
                 } else {
-                    // Si el backend nos manda algún error (ej. faltaron datos)
-                    alert("❌ Error: " + data.mensaje);
+                    reservaError.textContent = data.mensaje || 'No fue posible enviar la solicitud. Revisa los datos e intenta de nuevo.';
+                    reservaError.classList.remove('hidden');
                 }
 
             } catch (error) {
                 console.error("Error al enviar la reserva:", error);
-                alert("❌ Ocurrió un error de conexión con el servidor. Intenta de nuevo.");
+                reservaError.textContent = 'Ocurrió un error de conexión. Intenta de nuevo.';
+                reservaError.classList.remove('hidden');
             } finally {
                 submitButton.disabled = false;
                 submitButton.innerHTML = contenidoOriginal;

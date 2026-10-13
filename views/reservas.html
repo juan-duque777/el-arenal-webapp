@@ -101,7 +101,8 @@
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-bold text-gray-700">Hora</label>
-                            <input type="time" id="hora" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#D94D1A] focus:border-[#D94D1A] block w-full p-3.5 transition-all outline-none" required>
+                            <input type="time" id="hora" min="12:00" max="22:00" step="60" aria-describedby="horaError" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#D94D1A] focus:border-[#D94D1A] block w-full p-3.5 transition-all outline-none" required>
+                            <p id="horaError" class="hidden mt-2 text-sm font-medium text-red-600" role="alert"></p>
                         </div>
                     </div>
 
@@ -119,6 +120,7 @@
                         <span>Solicitar reserva</span>
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </button>
+                    <p id="reservaError" class="hidden text-sm font-medium text-red-600" role="alert"></p>
                 </form>
 
                 <div id="successMessage" class="hidden text-center py-12 fade-in-up">

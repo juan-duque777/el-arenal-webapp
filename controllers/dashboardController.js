@@ -6,6 +6,9 @@ const obtenerEstadisticas = async (req, res) => {
         const [resReservas] = await db.query('SELECT COUNT(*) as total FROM reservas');
         const totalReservas = resReservas[0].total;
 
+        const [resReservasPendientes] = await db.query("SELECT COUNT(*) as total FROM reservas WHERE estado = 'pendiente'");
+        const reservasPendientes = resReservasPendientes[0].total;
+
         // 2. Contar Total Platos en el Menú
         const [resPlatos] = await db.query('SELECT COUNT(*) as total FROM platos');
         const totalPlatos = resPlatos[0].total;
@@ -15,16 +18,18 @@ const obtenerEstadisticas = async (req, res) => {
         const totalOpiniones = resOpiniones[0].total;
         const promedio = parseFloat(resOpiniones[0].promedio).toFixed(1);
 
-        // 4. Traer las Reservas de HOY
-        const [reservasHoy] = await db.query('SELECT * FROM reservas WHERE DATE(fecha) = CURDATE() ORDER BY hora ASC LIMIT 5');
+        // Traer reservas recientes y futuras; el navegador elimina las que ya pasaron.
+        const [reservasProximas] = await db.query(
+            "SELECT *, DATE_FORMAT(fecha, '%Y-%m-%d') AS fecha_local FROM reservas WHERE fecha >= DATE_SUB(CURDATE(), INTERVAL 1 DAY) ORDER BY (fecha < CURDATE()) ASC, fecha ASC, hora ASC LIMIT 100"
+        );
 
         // 5. Traer la Actividad Reciente (Últimas 4 opiniones generales)
         const [actividad] = await db.query('SELECT nombre, calificacion, comentario, fecha_creacion FROM opiniones ORDER BY fecha_creacion DESC LIMIT 4');
 
         // Enviamos todo el paquete junto al Frontend
         res.status(200).json({
-            stats: { totalReservas, totalPlatos, totalOpiniones, promedio },
-            reservasHoy,
+            stats: { totalReservas, reservasPendientes, totalPlatos, totalOpiniones, promedio },
+            reservasProximas,
             actividad
         });
     } catch (error) {

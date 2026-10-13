@@ -22,6 +22,10 @@ const crearReserva = async (req, res) => {
             return res.status(400).json({ mensaje: 'Por favor completa todos los campos obligatorios.' });
         }
 
+        if (typeof hora !== 'string' || !/^([01]\d|2[0-3]):[0-5]\d$/.test(hora) || hora < '12:00' || hora > '22:00') {
+            return res.status(400).json({ mensaje: 'El horario de atención para reservas es de 12:00 p. m. a 10:00 p. m.' });
+        }
+
         if (typeof fecha !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
             return res.status(400).json({ mensaje: 'La fecha de la reserva no es válida.' });
         }

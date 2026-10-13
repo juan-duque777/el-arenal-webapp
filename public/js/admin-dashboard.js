@@ -9,19 +9,40 @@ document.addEventListener('DOMContentLoaded', () => {
             const domReservas = document.getElementById('stat-reservas');
             if (domReservas) domReservas.textContent = data.stats.totalReservas;
 
+            const domReservasPendientes = document.getElementById('stat-reservas-pendientes');
+            if (domReservasPendientes) domReservasPendientes.textContent = data.stats.reservasPendientes;
+
             const domOpiniones = document.getElementById('stat-opiniones');
             if (domOpiniones) domOpiniones.textContent = data.stats.totalOpiniones;
 
             const domPromedio = document.getElementById('stat-promedio');
             if (domPromedio) domPromedio.textContent = data.stats.promedio;
 
-            // 2. Pintar Reservas de Hoy
+            // 2. Pintar las próximas reservas pendientes de atención
             const contenedorReservas = document.getElementById('lista-reservas-hoy');
-            if (data.reservasHoy.length === 0) {
-                contenedorReservas.innerHTML = '<li class="text-center text-gray-500 py-4">No hay reservas programadas para hoy.</li>';
+            const ahoraPartes = Object.fromEntries(new Intl.DateTimeFormat('en-CA', {
+                timeZone: 'America/Bogota',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hourCycle: 'h23'
+            }).formatToParts(new Date()).map(parte => [parte.type, parte.value]));
+            const ahora = `${ahoraPartes.year}-${ahoraPartes.month}-${ahoraPartes.day}T${ahoraPartes.hour}:${ahoraPartes.minute}:${ahoraPartes.second}`;
+            const reservasFuturas = data.reservasProximas.filter(reserva => {
+                const fecha = reserva.fecha_local || String(reserva.fecha).slice(0, 10);
+                const hora = String(reserva.hora).slice(0, 8);
+                const fechaHora = `${fecha}T${hora}`;
+                return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(fechaHora) && fechaHora > ahora;
+            });
+
+            if (reservasFuturas.length === 0) {
+                contenedorReservas.innerHTML = '<li class="text-center text-gray-500 py-4">No hay próximas reservas.</li>';
             } else {
                 let htmlReservas = '';
-                data.reservasHoy.forEach(reserva => {
+                reservasFuturas.forEach(reserva => {
                     // Formatear hora (ej: 14:00:00 -> 2:00 PM)
                     const horaFormateada = new Date(`2000-01-01T${reserva.hora}`).toLocaleTimeString('es-CO', { hour: 'numeric', minute: '2-digit', hour12: true });
                     const nombre = escapeHTML(reserva.nombre);
