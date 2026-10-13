@@ -107,15 +107,7 @@
 
                     <div>
                         <label class="block mb-2 text-sm font-bold text-gray-700">Número de Personas</label>
-                        <select id="personas" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#D94D1A] focus:border-[#D94D1A] block w-full p-3.5 transition-all outline-none" required>
-                            <option value="" disabled selected>Selecciona la cantidad de invitados...</option>
-                            <option value="2">2 Personas (Pareja)</option>
-                            <option value="3">3 Personas</option>
-                            <option value="4">4 Personas (Familia)</option>
-                            <option value="5">5 Personas</option>
-                            <option value="6">6 a 10 Personas (Grupo)</option>
-                            <option value="10+">Más de 10 Personas (Evento Especial)</option>
-                        </select>
+                        <input type="number" id="personas" min="1" max="20" step="1" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#D94D1A] focus:border-[#D94D1A] block w-full p-3.5 transition-all outline-none" placeholder="Ej. 4" required>
                     </div>
 
                     <div>
@@ -124,7 +116,7 @@
                     </div>
 
                     <button type="submit" class="w-full text-white bg-gradient-to-r from-[#D94D1A] to-[#b53c15] hover:shadow-lg hover:shadow-orange-500/40 focus:ring-4 focus:outline-none focus:ring-orange-300 font-bold rounded-xl text-lg px-5 py-4 text-center transition-all transform active:scale-95 flex justify-center items-center gap-2 mt-4">
-                        <span>Confirmar Reserva</span>
+                        <span>Solicitar reserva</span>
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </button>
                 </form>
@@ -155,7 +147,7 @@
         <div class="mb-8 mt-2">
           <h3 class="text-lg font-semibold text-[#D94D1A] mb-1 flex items-center justify-center gap-1">📞 Contáctanos</h3>
           <p class="text-sm text-gray-700">Tel: <a href="https://wa.me/573114898444" class="text-[#D94D1A] font-medium hover:underline">+57 311 489 8444</a></p>
-          <p class="text-sm text-gray-700">Email: <a href="arenalrestaurante@gmail.com" class="text-[#D94D1A] hover:underline">arenalrestaurante@gmail.com</a></p>
+          <p class="text-sm text-gray-700">Email: <a href="mailto:arenalrestaurante@gmail.com" class="text-[#D94D1A] hover:underline">arenalrestaurante@gmail.com</a></p>
           <p class="text-sm text-gray-700 font-medium mt-1">📍 Kilómetro 10 vía Acacías</p>
         </div>
  

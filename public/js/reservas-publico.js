@@ -2,10 +2,24 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const reservaForm = document.getElementById('reservaForm');
     const successMessage = document.getElementById('successMessage');
+    const fechaInput = document.getElementById('fecha');
+
+    if (fechaInput) {
+        fechaInput.min = new Intl.DateTimeFormat('en-CA', {
+            timeZone: 'America/Bogota',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        }).format(new Date());
+    }
 
     if (reservaForm) {
         reservaForm.addEventListener('submit', async function(e) {
             e.preventDefault(); // Evitamos que la página se recargue al enviar
+            const submitButton = reservaForm.querySelector('button[type="submit"]');
+            const contenidoOriginal = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.textContent = 'Cargando...';
 
             // 1. Recolectamos todos los datos que el cliente escribió
             const datosReserva = {
@@ -44,6 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (error) {
                 console.error("Error al enviar la reserva:", error);
                 alert("❌ Ocurrió un error de conexión con el servidor. Intenta de nuevo.");
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = contenidoOriginal;
             }
         });
     }

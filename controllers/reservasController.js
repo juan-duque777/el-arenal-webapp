@@ -22,6 +22,31 @@ const crearReserva = async (req, res) => {
             return res.status(400).json({ mensaje: 'Por favor completa todos los campos obligatorios.' });
         }
 
+        if (typeof fecha !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+            return res.status(400).json({ mensaje: 'La fecha de la reserva no es válida.' });
+        }
+
+        const [anio, mes, dia] = fecha.split('-').map(Number);
+        const fechaSolicitada = new Date(Date.UTC(anio, mes - 1, dia));
+        if (
+            fechaSolicitada.getUTCFullYear() !== anio ||
+            fechaSolicitada.getUTCMonth() !== mes - 1 ||
+            fechaSolicitada.getUTCDate() !== dia
+        ) {
+            return res.status(400).json({ mensaje: 'La fecha de la reserva no es válida.' });
+        }
+
+        const fechaHoyColombia = new Intl.DateTimeFormat('en-CA', {
+            timeZone: 'America/Bogota',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        }).format(new Date());
+
+        if (fecha < fechaHoyColombia) {
+            return res.status(400).json({ mensaje: 'No es posible solicitar una reserva para una fecha pasada.' });
+        }
+
         const [resultado] = await db.query(
             'INSERT INTO reservas (nombre, telefono, fecha, hora, personas, notas) VALUES (?, ?, ?, ?, ?, ?)',
             [nombre, telefono, fecha, hora, personas, notas || '']

@@ -1,4 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    document.querySelectorAll('[data-logout]').forEach(link => {
+        link.addEventListener('click', async event => {
+            event.preventDefault();
+            link.setAttribute('aria-disabled', 'true');
+
+            try {
+                const response = await fetch('/api/auth/logout', { method: 'POST' });
+                if (!response.ok) throw new Error('No se pudo cerrar la sesión.');
+                window.location.replace('/login');
+            } catch (error) {
+                console.error('Error al cerrar sesión:', error);
+                link.removeAttribute('aria-disabled');
+                alert('No fue posible cerrar la sesión. Intenta de nuevo.');
+            }
+        });
+    });
     
     // 1. Inyectamos un contenedor invisible para las notificaciones flotantes (Toasts)
     const toastContainer = document.createElement('div');
