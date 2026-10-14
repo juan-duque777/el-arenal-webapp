@@ -138,27 +138,6 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
     <script>
-        // Script de filtrado mejorado para tarjetas flex-col
-        function filterMenu(category, btnElement) {
-            const items = document.querySelectorAll('.menu-item');
-            items.forEach(item => {
-                item.classList.remove('fade-in');
-                if (category === 'todos' || item.getAttribute('data-category') === category) {
-                    item.style.display = 'flex'; // Usamos flex porque las tarjetas nuevas son flex-col
-                    void item.offsetWidth; 
-                    item.classList.add('fade-in');
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-
-            const buttons = document.querySelectorAll('.filter-btn');
-            buttons.forEach(btn => {
-                btn.className = 'filter-btn bg-white text-gray-600 border border-gray-200 px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-gray-50 hover:text-[#D94D1A] mr-2 transition-all shadow-sm';
-            });
-            btnElement.className = 'filter-btn bg-[#D94D1A] text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-md shadow-orange-500/30 mr-2 transition-all';
-        }
-
         // Script del footer animado
         document.addEventListener("DOMContentLoaded", () => {
             const footer = document.getElementById("footer");

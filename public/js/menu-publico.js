@@ -1,8 +1,43 @@
+window.filterMenu = (category, btnElement) => {
+    const contenedorMenu = document.getElementById('contenedorMenu');
+    if (!contenedorMenu) return;
+
+    const items = contenedorMenu.querySelectorAll('.menu-item');
+    let visibles = 0;
+
+    items.forEach(item => {
+        const coincide = category === 'todos' || item.getAttribute('data-category') === category;
+        item.classList.remove('fade-in');
+        item.style.display = coincide ? 'flex' : 'none';
+        if (coincide) {
+            visibles += 1;
+            void item.offsetWidth;
+            item.classList.add('fade-in');
+        }
+    });
+
+    let estadoVacio = document.getElementById('menuCategoriaVacia');
+    if (!estadoVacio) {
+        estadoVacio = document.createElement('div');
+        estadoVacio.id = 'menuCategoriaVacia';
+        estadoVacio.className = 'col-span-full rounded-3xl border border-gray-100 bg-white px-6 py-12 text-center text-gray-600 shadow-sm';
+        estadoVacio.setAttribute('role', 'status');
+        estadoVacio.textContent = 'Próximamente tendremos opciones deliciosas en esta categoría';
+        contenedorMenu.appendChild(estadoVacio);
+    }
+    estadoVacio.classList.toggle('hidden', visibles > 0);
+
+    if (btnElement) {
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.className = 'filter-btn bg-white text-gray-600 border border-gray-200 px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-gray-50 hover:text-[#D94D1A] mr-2 transition-all shadow-sm shrink-0';
+        });
+        btnElement.className = 'filter-btn bg-[#D94D1A] text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-md shadow-orange-500/30 mr-2 transition-all shrink-0';
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
-    
     const contenedorMenu = document.getElementById('contenedorMenu');
 
-    // Función para obtener y dibujar los platos para los clientes
     const cargarMenuPublico = async () => {
         try {
             // 1. Pedimos los datos a la cocina (Nuestra API REST)
@@ -69,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     };
-
     cargarMenuPublico();
-
+    cargarMenuPublico();
 });

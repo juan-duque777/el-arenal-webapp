@@ -43,8 +43,18 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 let htmlReservas = '';
                 reservasFuturas.forEach(reserva => {
-                    // Formatear hora (ej: 14:00:00 -> 2:00 PM)
-                    const horaFormateada = new Date(`2000-01-01T${reserva.hora}`).toLocaleTimeString('es-CO', { hour: 'numeric', minute: '2-digit', hour12: true });
+                    const fecha = reserva.fecha_local || String(reserva.fecha).slice(0, 10);
+                    const hora = String(reserva.hora).slice(0, 8);
+                    const fechaHora = new Date(`${fecha}T${hora}-05:00`);
+                    const fechaHoraFormateada = new Intl.DateTimeFormat('es-CO', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true,
+                        timeZone: 'America/Bogota'
+                    }).format(fechaHora);
                     const nombre = escapeHTML(reserva.nombre);
                     const inicialNombre = escapeHTML(String(reserva.nombre || '').charAt(0).toUpperCase());
                     
@@ -60,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>
                         <div class="text-right">
-                            <span class="block font-bold text-[#D94D1A]">${escapeHTML(horaFormateada)}</span>
+                            <span class="block font-bold text-[#D94D1A]">${escapeHTML(fechaHoraFormateada)}</span>
                             <span class="text-xs font-medium px-2 py-1 rounded-full bg-yellow-100 text-yellow-700 uppercase mt-1 inline-block">${escapeHTML(reserva.estado)}</span>
                         </div>
                     </li>`;

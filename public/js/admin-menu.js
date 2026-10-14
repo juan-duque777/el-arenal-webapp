@@ -8,6 +8,99 @@ document.addEventListener('DOMContentLoaded', () => {
     const tablaPlatosBody = document.getElementById('tablaPlatosBody');
     const contenedorTarjetasMovil = document.getElementById('contenedorTarjetasMovil');
     const buscador = document.querySelector('input[placeholder="Buscar plato..."]');
+    const deleteModal = document.getElementById('deletePlatoModal');
+    const deleteModalNombre = document.getElementById('deletePlatoNombre');
+    const deleteModalError = document.getElementById('deletePlatoError');
+    const deleteModalConfirmar = document.getElementById('confirmarEliminarPlato');
+    const deleteModalCancelar = document.getElementById('cancelarEliminarPlato');
+    let platoPendienteEliminar = null;
+    let disparadorModal = null;
+    let eliminacionCompletada = false;
+    let eliminandoPlato = false;
+
+    const cerrarModalEliminar = () => {
+        if (!deleteModal || eliminandoPlato) return;
+        deleteModal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+        if (disparadorModal && document.contains(disparadorModal)) disparadorModal.focus();
+        disparadorModal = null;
+        platoPendienteEliminar = null;
+    };
+
+    if (deleteModal) {
+        deleteModal.addEventListener('click', event => {
+            if (event.target === deleteModal || event.target.hasAttribute('data-delete-modal-backdrop')) {
+                cerrarModalEliminar();
+            }
+        });
+
+        deleteModalCancelar.addEventListener('click', cerrarModalEliminar);
+        deleteModalConfirmar.addEventListener('click', async () => {
+            if (eliminacionCompletada) {
+                cerrarModalEliminar();
+                return;
+            }
+            if (eliminandoPlato || platoPendienteEliminar === null) return;
+
+            eliminandoPlato = true;
+            deleteModalError.classList.add('hidden');
+            deleteModalConfirmar.disabled = true;
+            deleteModalCancelar.disabled = true;
+            deleteModalConfirmar.textContent = 'Eliminando...';
+
+            try {
+                const response = await fetch(`/api/platos/${platoPendienteEliminar}`, { method: 'DELETE' });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.mensaje || 'No fue posible eliminar el plato.');
+
+                await cargarPlatos();
+                eliminacionCompletada = true;
+                deleteModalError.classList.remove('hidden', 'text-red-600');
+                deleteModalError.classList.add('text-green-700');
+                deleteModalError.textContent = data.mensaje || 'El plato se eliminó correctamente.';
+                deleteModalConfirmar.disabled = false;
+                deleteModalConfirmar.textContent = 'Listo';
+                deleteModalCancelar.classList.add('hidden');
+            } catch (error) {
+                console.error('Error borrando plato:', error);
+                deleteModalError.classList.remove('hidden', 'text-green-700');
+                deleteModalError.classList.add('text-red-600');
+                deleteModalError.textContent = error.message || 'No fue posible completar la eliminación. Intenta de nuevo.';
+                deleteModalConfirmar.disabled = false;
+                deleteModalConfirmar.textContent = 'Intentar de nuevo';
+                deleteModalCancelar.disabled = false;
+            } finally {
+                eliminandoPlato = false;
+            }
+        });
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && !deleteModal.classList.contains('hidden')) {
+                cerrarModalEliminar();
+            }
+        });
+    }
+
+    window.borrarPlato = id => {
+        const plato = listaPlatos.find(item => Number(item.id) === Number(id));
+        if (!deleteModal || !deleteModalNombre || !deleteModalError || !deleteModalConfirmar || !deleteModalCancelar) return;
+
+        platoPendienteEliminar = id;
+        disparadorModal = document.activeElement;
+        eliminacionCompletada = false;
+        deleteModalNombre.textContent = plato ? plato.nombre : 'este plato';
+        deleteModalError.textContent = '';
+        deleteModalError.classList.add('hidden');
+        deleteModalError.classList.remove('text-green-700');
+        deleteModalError.classList.add('text-red-600');
+        deleteModalConfirmar.disabled = false;
+        deleteModalConfirmar.textContent = 'Eliminar plato';
+        deleteModalCancelar.disabled = false;
+        deleteModalCancelar.classList.remove('hidden');
+        deleteModal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+        deleteModalCancelar.focus();
+    };
 
     window.cargarPlatos = async () => {
         try {
@@ -164,20 +257,4 @@ window.prepararEdicion = (id) => {
 
     platoEnEdicionId = id;
     document.getElementById('btnAbrirEditModal').click();
-};
-
-window.borrarPlato = async (id) => {
-    if (confirm("⚠️ ¿Estás seguro de que quieres eliminar este plato y su imagen para siempre?")) {
-        try {
-            const response = await fetch(`/api/platos/${id}`, { method: 'DELETE' });
-            const data = await response.json();
-            if (response.ok) {
-                alert("✅ " + data.mensaje);
-                cargarPlatos(); 
-            } else alert("❌ " + data.mensaje);
-        } catch (error) { 
-            console.error("Error borrando plato:", error);
-            alert("❌ Error de conexión"); 
-        }
-    }
 };
