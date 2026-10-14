@@ -59,9 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const categoriaFiltro = plato.categoria || 'Adicionales';
                 const precio = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(plato.precio);
 
-                const img = typeof plato.imagen === 'string' && /^\/uploads\/[A-Za-z0-9._-]+$/.test(plato.imagen)
-                    ? plato.imagen
-                    : 'https://via.placeholder.com/400x300?text=Sabor+Llanero';
+                const img = safeImageURL(plato.imagen)
+                    || '/img/logo.png';
                 // ==========================================
                 // 🎨 NUEVO DISEÑO DE TARJETA (Imagen con margen y botón de reserva)
                 // ==========================================

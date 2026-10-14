@@ -117,9 +117,8 @@ document.addEventListener('DOMContentLoaded', () => {
         platosA_Dibujar.forEach(plato => {
             const cat = escapeHTML(plato.categoria || 'Sin Categoría');
             const precio = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(plato.precio);
-            const img = typeof plato.imagen === 'string' && /^\/uploads\/[A-Za-z0-9._-]+$/.test(plato.imagen)
-                ? plato.imagen
-                : 'https://via.placeholder.com/100?text=Sin+Foto';
+            const img = safeImageURL(plato.imagen)
+                || '/img/logo.png';
             const nombre = escapeHTML(plato.nombre);
             const descripcion = escapeHTML(plato.descripcion || '');
             const platoId = Number.isSafeInteger(Number(plato.id)) ? Number(plato.id) : 0;
@@ -251,9 +250,7 @@ window.prepararEdicion = (id) => {
     document.getElementById('editDescripcionPlato').value = plato.descripcion || "";
     document.getElementById('editImagenPlato').value = "";
 
-    document.getElementById('editImagenActual').src = typeof plato.imagen === 'string' && /^\/uploads\/[A-Za-z0-9._-]+$/.test(plato.imagen)
-        ? plato.imagen
-        : 'https://via.placeholder.com/100?text=Sin+Foto';
+    document.getElementById('editImagenActual').src = safeImageURL(plato.imagen) || '/img/logo.png';
 
     platoEnEdicionId = id;
     document.getElementById('btnAbrirEditModal').click();

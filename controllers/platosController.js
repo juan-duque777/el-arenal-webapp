@@ -1,6 +1,51 @@
 const db = require('../database/db');
-const fs = require('fs'); // Para poder borrar archivos físicos
+const fs = require('fs');
 const path = require('path');
+const cloudinary = require('../config/cloudinary');
+
+async function eliminarImagenSubida(file) {
+    if (file && file.filename) {
+        await cloudinary.uploader.destroy(file.filename, { resource_type: 'image' });
+    }
+}
+
+async function eliminarImagenGuardada(imagenUrl) {
+    if (typeof imagenUrl !== 'string') return;
+
+    let url;
+    try {
+        url = new URL(imagenUrl);
+    } catch {
+        url = null;
+    }
+
+    if (
+        url &&
+        url.protocol === 'https:' &&
+        url.hostname === 'res.cloudinary.com' &&
+        url.pathname.startsWith(`/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/`)
+    ) {
+        const partes = url.pathname.split('/').filter(Boolean);
+        const uploadIndex = partes.indexOf('upload');
+        const publicIdParts = partes.slice(uploadIndex + 1);
+        if (/^v\d+$/.test(publicIdParts[0] || '')) publicIdParts.shift();
+        const lastPart = publicIdParts.pop();
+        if (!lastPart) return;
+        publicIdParts.push(lastPart.replace(/\.[^.]+$/, ''));
+        await cloudinary.uploader.destroy(decodeURIComponent(publicIdParts.join('/')), { resource_type: 'image' });
+        return;
+    }
+
+    const legacyMatch = /^\/uploads\/([A-Za-z0-9._-]+)$/.exec(imagenUrl);
+    if (legacyMatch) {
+        const rutaFisica = path.join(__dirname, '../public/uploads', legacyMatch[1]);
+        try {
+            await fs.promises.unlink(rutaFisica);
+        } catch (error) {
+            if (error.code !== 'ENOENT') throw error;
+        }
+    }
+}
 
 const obtenerPlatos = async (req, res) => {
     try {
@@ -16,18 +61,26 @@ const crearPlato = async (req, res) => {
     try {
         // Recibimos los datos del frontend
         const { nombre, descripcion, precio, categoria_id } = req.body;
-        // Obtenemos la ruta de la imagen (si se subió una)
-        const imagen_url = req.file ? `/uploads/${req.file.filename}` : null;
+        const imagen_url = req.file ? req.file.path : null;
 
-        if (!nombre || !precio) return res.status(400).json({ mensaje: "Nombre y precio obligatorios" });
+        if (!nombre || !precio) {
+            if (req.file) await eliminarImagenSubida(req.file);
+            return res.status(400).json({ mensaje: 'Nombre y precio obligatorios' });
+        }
 
-        // 🔥 CORRECCIÓN: Usamos las columnas 'categoria' e 'imagen' que sí existen en tu BD
         await db.query(
             'INSERT INTO platos (nombre, descripcion, precio, categoria, imagen) VALUES (?, ?, ?, ?, ?)',
             [nombre, descripcion, precio, categoria_id || null, imagen_url]
         );
-        res.status(201).json({ mensaje: "¡Plato y foto guardados exitosamente! 🍽️" });
+        res.status(201).json({ mensaje: '¡Plato y foto guardados exitosamente! 🍽️' });
     } catch (error) {
+        if (req.file) {
+            try {
+                await eliminarImagenSubida(req.file);
+            } catch (cleanupError) {
+                console.error('No se pudo limpiar la imagen de Cloudinary tras fallar el guardado:', cleanupError);
+            }
+        }
         console.error("Error exacto en BD:", error);
         res.status(500).json({ mensaje: 'Error al guardar el plato' });
     }
@@ -38,23 +91,36 @@ const actualizarPlato = async (req, res) => {
     try {
         const { id } = req.params;
         const { nombre, descripcion, precio, categoria_id } = req.body;
-        let imagen_url = req.file ? `/uploads/${req.file.filename}` : null;
+        const imagen_url = req.file ? req.file.path : null;
 
         if (imagen_url) {
-            // 🔥 CORRECCIÓN: Actualizamos 'categoria' e 'imagen'
+            const [platos] = await db.query('SELECT imagen FROM platos WHERE id = ?', [id]);
             await db.query(
                 'UPDATE platos SET nombre = ?, descripcion = ?, precio = ?, categoria = ?, imagen = ? WHERE id = ?',
                 [nombre, descripcion, precio, categoria_id || null, imagen_url, id]
             );
+            if (platos.length > 0 && platos[0].imagen) {
+                try {
+                    await eliminarImagenGuardada(platos[0].imagen);
+                } catch (cleanupError) {
+                    console.error('No se pudo eliminar la imagen anterior del plato:', cleanupError);
+                }
+            }
         } else {
-            // 🔥 CORRECCIÓN: Actualizamos 'categoria' (cuando no se cambia la foto)
             await db.query(
                 'UPDATE platos SET nombre = ?, descripcion = ?, precio = ?, categoria = ? WHERE id = ?',
                 [nombre, descripcion, precio, categoria_id || null, id]
             );
         }
-        res.status(200).json({ mensaje: "Plato actualizado correctamente" });
+        res.status(200).json({ mensaje: 'Plato actualizado correctamente' });
     } catch (error) {
+        if (req.file) {
+            try {
+                await eliminarImagenSubida(req.file);
+            } catch (cleanupError) {
+                console.error('No se pudo limpiar la imagen de Cloudinary tras fallar la actualización:', cleanupError);
+            }
+        }
         console.error("Error exacto en BD:", error);
         res.status(500).json({ mensaje: 'Error al actualizar el plato' });
     }
@@ -65,20 +131,21 @@ const eliminarPlato = async (req, res) => {
     try {
         const { id } = req.params;
         
-        // 1. Buscamos la foto en la columna correcta ('imagen')
         const [platos] = await db.query('SELECT imagen FROM platos WHERE id = ?', [id]);
-        
-        // 2. Borramos el plato de la base de datos
         await db.query('DELETE FROM platos WHERE id = ?', [id]);
-        
-        // 3. Borramos la foto física del servidor (si existe)
-        // db.query devuelve un arreglo de filas, por eso usamos platos[0]
+
         if (platos.length > 0 && platos[0].imagen) {
-            const rutaFisica = path.join(__dirname, '../public', platos[0].imagen);
-            if (fs.existsSync(rutaFisica)) fs.unlinkSync(rutaFisica);
+            try {
+                await eliminarImagenGuardada(platos[0].imagen);
+            } catch (cleanupError) {
+                console.error('No se pudo eliminar la imagen del plato:', cleanupError);
+                return res.status(200).json({
+                    mensaje: 'Plato eliminado, pero no se pudo eliminar su imagen almacenada.'
+                });
+            }
         }
-        
-        res.status(200).json({ mensaje: "¡Plato e imagen eliminados! 🗑️" });
+
+        res.status(200).json({ mensaje: '¡Plato e imagen eliminados! 🗑️' });
     } catch (error) {
         console.error("Error al eliminar:", error);
         res.status(500).json({ mensaje: "Error al eliminar el plato" });
